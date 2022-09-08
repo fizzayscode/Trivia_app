@@ -67,14 +67,13 @@ One note before you delve into your tasks: for each endpoint, you are expected t
 8. Create a `POST` endpoint to get questions to play the quiz. This endpoint should take a category and previous question parameters and return a random questions within the given category, if provided, and that is not one of the previous questions.
 9. Create error handlers for all expected errors including 400, 404, 422, and 500.
 
-## Documenting your Endpoints
+## Documention
 
 You will need to provide detailed documentation of your API endpoints including the URL, request parameters, and the response body. Use the example below as a reference.
 
 ### Documentation Example
 
-`GET '/api/v1.0/categories'`
-
+`GET '/categories`
 - Fetches a dictionary of categories in which the keys are the ids and the value is the corresponding string of the category
 - Request Arguments: None
 - Returns: An object with a single key, `categories`, that contains an object of `id: category_string` key: value pairs.
@@ -90,6 +89,144 @@ You will need to provide detailed documentation of your API endpoints including 
 }
 ```
 
+`GET '/questions'`
+
+- Fetches a dictionary of all questions of all categories, 10 questions per page
+- Request Arguments which is optional indicates the number of current page: page
+- Returns: An object with respective keys "categories", "current_category", "questions", "total_questions" and `success`
+
+```json
+{
+  "categories": {
+    "1": "Science",
+    "2": "Art",
+    "3": "Geography",
+    "4": "History",
+    "5": "Entertainment",
+    "6": "Sports"
+  },
+  "success": true,
+  "current_category": null,
+  "total_questions": 2,
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is always comin g but never arrives",
+      "answer": "tommorow",
+      "category": 5,
+      "difficulty": 1
+    },
+    {
+      "id": 2,
+      "question": "what can be broken but never held",
+      "answer": "promise",
+      "category": 5,
+      "difficulty": 3
+    }
+  ]
+}
+```
+
+`DELETE '/questions/<question_id>'`
+
+-DELETES an existing question from the questions in the database
+-Request Arguments : question id
+-Returns: An object with unique key "success"
+
+```json
+{
+  "success": true
+}
+```
+
+`POST '/questions'`
+-Fetches a dictionary of all questions related to a predefined string alphabets
+-Request Arguments :`{'searchTerm':string}`
+-Return: An object with unique keys `success`, "total_questions" and "questions"
+
+```json
+{
+  "success": true,
+  "total_questions": 2,
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is always comin g but never arrives",
+      "answer": "tommorrow",
+      "category": 1,
+      "difficulty": 1
+    },
+    {
+      "id": 2,
+      "question":  "what can be broken but never held",
+      "answer": "promise",
+      "category": 5,
+      "difficulty": 3
+    }
+  ]
+}
+```
+
+`POST '/questions'`
+
+-Add a new question to the database
+-Request Arguments :`{'question':string, 'answer':string, 'difficulty':int, 'category':int}`
+-Return: An object with unique key `"success"`
+
+```json
+{
+  "success": true
+}
+```
+
+`GET '/categories/<category_id>/questions'`
+
+-Fetch a dictionary of all available questions for a provided category
+-Request Arguments :category id
+-Return: An object with respective keys `"success"`, "questions", "total_questions" and "current_category"
+```json
+{
+  "success": true,
+  "current_category": 5,
+  "total_questions": 2,
+  "questions": [
+    {
+      "id": 1,
+      "question": "What is always comin g but never arrives",
+      "answer": "tommorow",
+      "category": 5,
+      "difficulty": 1
+    },
+    {
+      "id": 2,
+      "question": "what can be broken but never held",
+      "answer": "promise",
+      "category": 5,
+      "difficulty": 3
+    }
+  ]
+}
+```
+
+`POST '/quizzes'`
+
+-Fetches random question from a predifined category. 
+-does not repeat question in a category 
+-When all the questions have been iterated it pribts the final score for us based on how many we got right
+-Request Arguments :`{'previous_questions':string, 'quiz_category': {id:int, type:string}}`
+-Return: An object with respective keys `"success"` and "question"
+```json
+{
+  "success": true,
+  "question": {
+    "id": 1,
+    "question": "what can be broken but never held",
+    "answer": "promise",
+    "category": 5,
+    "difficulty": 3
+  }
+}
+```
 ## Testing
 
 Write at least one test for the success and at least one error behavior of each endpoint using the unittest library.
